@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Aurelie Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="hamburger dark dash-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <a href="index.html" class="logo serif">Aurelie · Admin</a>
+    <nav>
+      <a href="dashboard-admin.html" class="active">Overview</a>
+      <a href="dashboard-admin.html#rooms">Manage Rooms</a>
+      <a href="dashboard-admin.html#bookings">Manage Bookings</a>
+      <a href="dashboard-admin.html#guests">Manage Guests</a>
+      <a href="dashboard-admin.html#reports">Reports</a>
+      <a href="index.html">Back to Website</a>
+      <a href="login.html" id="logoutLink">Log out</a>
+    </nav>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-header">
+      <div>
+        <h2>Overview</h2>
+        <div class="dash-welcome" id="welcomeText">Aurelie Hotel</div>
+      </div>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card2"><div class="label">Total bookings</div><div class="value" id="statBookings">—</div></div>
+      <div class="stat-card2"><div class="label">Pending bookings</div><div class="value brass" id="statPending">—</div></div>
+      <div class="stat-card2"><div class="label">Registered guests</div><div class="value" id="statGuests">—</div></div>
+      <div class="stat-card2"><div class="label">Rooms listed</div><div class="value" id="statRooms">6</div></div>
+    </div>
+
+    <div id="bookings">
+      <h2 style="color:var(--ink); font-size:1.2rem; margin-bottom:16px;">Recent bookings</h2>
+      <div class="dash-table-wrap">
+        <table class="dash-table">
+          <thead>
+            <tr><th>Guest</th><th>Room</th><th>Dates</th><th>Total</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="bookingsBody">
+            <tr><td colspan="6" class="dash-empty">Loading bookings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="rooms" style="margin-top:44px;">
+      <div class="dash-header" style="margin-bottom:16px;">
+        <h2 style="color:var(--ink); font-size:1.2rem;">Manage rooms</h2>
+        <a href="#" class="btn-primary btn-brass" style="width:auto; padding:10px 20px; font-size:0.85rem;">+ Add Room</a>
+      </div>
+      <p style="color:var(--sage); font-size:0.85rem; margin:-8px 0 16px;">
+        Room add/edit isn't connected to Firestore yet — this list is still static for now.
+      </p>
+      <div class="dash-table-wrap">
+        <table class="dash-table">
+          <thead><tr><th>Room</th><th>Price / night</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Standard Room</td><td>₦25,000</td><td><span class="badge confirmed">Available</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+            <tr><td>Deluxe Room</td><td>₦40,000</td><td><span class="badge confirmed">Available</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+            <tr><td>Executive Suite</td><td>₦65,000</td><td><span class="badge pending">Occupied</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+            <tr><td>Swiss Room</td><td>₦50,000</td><td><span class="badge confirmed">Available</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+            <tr><td>Ambassadorial Suite</td><td>₦85,000</td><td><span class="badge confirmed">Available</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+            <tr><td>Presidential Suite</td><td>₦150,000</td><td><span class="badge confirmed">Available</span></td><td><a href="#" class="dash-action">Edit</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="guests" style="margin-top:44px;">
+      <h2 style="color:var(--ink); font-size:1.2rem; margin-bottom:16px;">Registered guests</h2>
+      <div class="dash-table-wrap">
+        <table class="dash-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Joined</th></tr></thead>
+          <tbody id="guestsBody">
+            <tr><td colspan="3" class="dash-empty">Loading guests...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="reports" style="margin-top:44px; margin-bottom:20px;">
+      <h2 style="color:var(--ink); font-size:1.2rem; margin-bottom:16px;">Reports</h2>
+      <div class="stat-cards" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-card2"><div class="label">This month's revenue</div><div class="value">₦4.2M</div></div>
+        <div class="stat-card2"><div class="label">Bookings this month</div><div class="value">34</div></div>
+        <div class="stat-card2"><div class="label">Average stay length</div><div class="value brass">2.4 nights</div></div>
+      </div>
+      <p style="color:var(--sage); font-size:0.8rem; margin-top:10px;">
+        Revenue and average-stay figures are still placeholders — real report calculations come once enough bookings exist.
+      </p>
+    </div>
+  </main>
+</div>
+
+<script src="main.js"></script>
+<script type="module">
+  import { requireAdmin, logOut } from "./auth.js";
+  import { db } from "./firebase-config.js";
+  import { collection, getDocs, query, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  document.getElementById('logoutLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    logOut();
+  });
+
+  requireAdmin(async (user) => {
+    document.getElementById('welcomeText').textContent = `Aurelie Hotel · Logged in as ${user.email}`;
+
+    // ---- Bookings (all guests, since this is the admin view) ----
+    const bookingsBody = document.getElementById('bookingsBody');
+    try {
+      const bookingsSnap = await getDocs(collection(db, "bookings"));
+      document.getElementById('statBookings').textContent = bookingsSnap.size;
+      let pending = 0;
+      if (bookingsSnap.empty) {
+        bookingsBody.innerHTML = `<tr><td colspan="6" class="dash-empty">No bookings yet.</td></tr>`;
+      } else {
+        bookingsBody.innerHTML = '';
+        bookingsSnap.forEach(docSnap => {
+          const b = docSnap.data();
+          if (b.status === 'Pending') pending++;
+          const badgeClass = b.status === 'Confirmed' ? 'confirmed'
+                            : b.status === 'Checked-out' ? 'checkedout'
+                            : b.status === 'Cancelled' ? 'cancelled' : 'pending';
+          bookingsBody.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td>${b.guestName || b.guestId || ''}</td>
+              <td>${b.roomName || ''}</td>
+              <td>${b.checkIn || ''} – ${b.checkOut || ''}</td>
+              <td>₦${(b.totalAmount || 0).toLocaleString('en-NG')}</td>
+              <td><span class="badge ${badgeClass}">${b.status || 'Pending'}</span></td>
+              <td><a href="#" class="dash-action">View</a></td>
+            </tr>`);
+        });
+      }
+      document.getElementById('statPending').textContent = pending;
+    } catch (err) {
+      bookingsBody.innerHTML = `<tr><td colspan="6" class="dash-empty">Couldn't load bookings.</td></tr>`;
+      console.error(err);
+    }
+
+    // ---- Registered guests (users where role == guest) ----
+    const guestsBody = document.getElementById('guestsBody');
+    try {
+      const usersSnap = await getDocs(collection(db, "users"));
+      let guestCount = 0;
+      guestsBody.innerHTML = '';
+      usersSnap.forEach(docSnap => {
+        const u = docSnap.data();
+        if (u.role !== 'guest') return;
+        guestCount++;
+        const joined = u.createdAt && u.createdAt.toDate ? u.createdAt.toDate().toLocaleDateString() : '—';
+        guestsBody.insertAdjacentHTML('beforeend', `
+          <tr><td>${u.name || ''}</td><td>${u.email || ''}</td><td>${joined}</td></tr>`);
+      });
+      document.getElementById('statGuests').textContent = guestCount;
+      if (guestCount === 0) {
+        guestsBody.innerHTML = `<tr><td colspan="3" class="dash-empty">No guests registered yet.</td></tr>`;
+      }
+    } catch (err) {
+      guestsBody.innerHTML = `<tr><td colspan="3" class="dash-empty">Couldn't load guests.</td></tr>`;
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>

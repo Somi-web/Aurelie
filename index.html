@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelie Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="sitenav">
+  <div class="logo">Aurelie</div>
+  <div class="nav-links">
+    <a href="about.html">ABOUT</a>
+    <a href="room.html">ROOMS</a>
+    <a href="contact.html">CONTACT</a>
+  </div>
+  <a href="booking.html" class="nav-book">Book a room</a>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay"></div>
+
+<section class="hero">
+  <div class="hero-visual">
+    <div class="hero-copy">
+      <span class="eyebrow serif">Ilesa Road, Osun State</span>
+      <h1>A quiet stay, done properly.</h1>
+      <p>Rooms, restaurant and service built around one idea: make the stay easy from the first click to checkout.</p>
+      <div class="hero-rating"><span class="stars">★★★★★</span><span>4.8 from 320 guest reviews</span></div>
+    </div>
+    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  </div>
+  <div class="hero-side">
+    <form class="booking-card" action="booking.html">
+      <h3>Check availability</h3>
+      <div class="field-row">
+        <div class="field"><label>Check-in</label><input type="date"></div>
+        <div class="field"><label>Check-out</label><input type="date"></div>
+      </div>
+      <div class="field">
+        <label>Guests</label>
+        <select><option>1 guest</option><option>2 guests</option><option>3+ guests</option></select>
+      </div>
+      <div class="field">
+        <label>Room type</label>
+        <select>
+          <option>Standard</option>
+          <option>Deluxe</option>
+          <option>Executive Suite</option>
+          <option>Swiss Room</option>
+          <option>Ambassadorial Suite</option>
+          <option>Presidential Suite</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Search rooms</button>
+    </form>
+  </div>
+</section>
+
+<section class="section about reveal">
+  <div class="about-img"></div>
+  <div>
+    <h2>Built for guests who don't want to think twice.</h2>
+    <p>Aurelie runs on a simple system: real-time room availability, one dashboard for staff, and a booking flow guests can finish in under two minutes — no calls, no back-and-forth.</p>
+    <p>Every reservation, check-in and bill lives in one place, so nothing gets lost between the front desk and the back office.</p>
+    <div class="stat-row">
+      <div class="stat"><b>42</b><span>Rooms</span></div>
+      <div class="stat"><b>24/7</b><span>Front desk</span></div>
+      <div class="stat"><b>4.8</b><span>Guest rating</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="rooms-header reveal">
+    <h2>Rooms &amp; rates</h2>
+    <p>Three room types, each with live availability from the booking system.</p>
+  </div>
+  <div class="room-grid">
+    <a href="room.html" class="room-card reveal">
+      <div class="room-img" style="background-image:url('Image/Standard\ Room.jpg');"></div>
+      <div class="room-info">
+        <div class="room-name">Standard Room</div>
+        <div class="room-meta">1 king bed · up to 2 guests</div>
+        <div class="room-price">₦25,000 <span>/ night</span></div>
+      </div>
+    </a>
+    <a href="room.html" class="room-card reveal reveal-delay-1">
+      <div class="room-img" style="background-image:url('Image/Deluxe\ Room.jpg');"></div>
+      <div class="room-info">
+        <div class="room-name">Deluxe Room</div>
+        <div class="room-meta">1 king bed · balcony · up to 2 guests</div>
+        <div class="room-price">₦40,000 <span>/ night</span></div>
+      </div>
+    </a>
+    <a href="room.html" class="room-card reveal reveal-delay-2">
+      <div class="room-img" style="background-image:url('Image/Executive\ Suite.jpg');"></div>
+      <div class="room-info">
+        <div class="room-name">Executive Suite</div>
+        <div class="room-meta">1 king bed · lounge · up to 4 guests</div>
+        <div class="room-price">₦65,000 <span>/ night</span></div>
+      </div>
+    </a>
+    <a href="room.html" class="room-card reveal">
+      <div class="room-img" style="background-image:url('Image/Super\ Executive\ Room.jpeg');"></div>
+      <div class="room-info">
+        <div class="room-name">Super Executive Suite</div>
+        <div class="room-meta">1 queen bed · workspace · up to 2 guests</div>
+        <div class="room-price">₦50,000 <span>/ night</span></div>
+      </div>
+    </a>
+    <a href="room.html" class="room-card reveal reveal-delay-1">
+      <div class="room-img" style="background-image:url('Image/Ambassadorial\ Suites.jpg');"></div>
+      <div class="room-info">
+        <div class="room-name">Ambassadorial Suite</div>
+        <div class="room-meta">1 king bed · living area · up to 4 guests</div>
+        <div class="room-price">₦85,000 <span>/ night</span></div>
+      </div>
+    </a>
+    <a href="room.html" class="room-card reveal reveal-delay-2">
+      <div class="room-img" style="background-image:url('Image/Presidential\ Suites.jpg');"></div>
+      <div class="room-info">
+        <div class="room-name">Presidential Suite</div>
+        <div class="room-meta">1 king bed · private lounge · up to 6 guests</div>
+        <div class="room-price">₦150,000 <span>/ night</span></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-head reveal"><h2>What guests say</h2></div>
+    <div class="review-grid">
+      <div class="review-card reveal">
+        <span class="stars">★★★★★</span>
+        <p>"Booked online in two minutes, room was exactly as shown, check-in took under five minutes."</p>
+        <div class="who">Bimpe A. <span>Deluxe Room · Sept 2026</span></div>
+      </div>
+      <div class="review-card reveal reveal-delay-1">
+        <span class="stars">★★★★★</span>
+        <p>"Front desk had my details ready before I even reached the counter. Smooth from start to finish."</p>
+        <div class="who">Chidi O. <span>Executive Suite · Aug 2026</span></div>
+      </div>
+      <div class="review-card reveal reveal-delay-2">
+        <span class="stars">★★★★★</span>
+        <p>"Quiet, clean, and the online booking meant no back-and-forth calls. Would stay again."</p>
+        <div class="who">Grace E. <span>Standard Room · Aug 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta reveal">
+  <h2 class="serif">Ready to book your stay?</h2>
+  <p>Reach the front desk directly, or check availability and book online in under two minutes.</p>
+  <a href="booking.html" class="btn-primary">Check availability</a>
+</section>
+
+<footer>
+  <span>© Aurelie Hotel</span>
+  <span>Ilesa Road, Osun State · +234 000 000 0000</span>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

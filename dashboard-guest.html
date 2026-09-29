@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Bookings — Aurelie Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button class="hamburger dark dash-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <a href="index.html" class="logo serif">Aurelie</a>
+    <nav>
+      <a href="dashboard-guest.html" class="active">My Bookings</a>
+      <a href="dashboard-guest.html#profile">Profile</a>
+      <a href="dashboard-guest.html#payments">Payment History</a>
+      <a href="index.html">Back to Website</a>
+      <a href="login.html" id="logoutLink">Log out</a>
+    </nav>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-header">
+      <div>
+        <h2>My Bookings</h2>
+        <div class="dash-welcome" id="welcomeText">Welcome back — here's everything on your account.</div>
+      </div>
+      <a href="booking.html" class="btn-primary btn-brass" style="width:auto; padding:12px 24px;">+ New Booking</a>
+    </div>
+
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>Room</th><th>Check-in</th><th>Check-out</th><th>Total</th><th>Status</th><th></th></tr>
+        </thead>
+        <tbody id="bookingsBody">
+          <tr><td colspan="6" class="dash-empty">Loading your bookings...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="profile" style="margin-top:48px;">
+      <h2 style="color:var(--ink); font-size:1.3rem; margin-bottom:20px;">Profile</h2>
+      <div class="auth-card" style="max-width:440px; padding:32px 28px; box-shadow:none; border:1px solid #e3dbc9;">
+        <div class="field"><label>Full name</label><input type="text" id="profileName"></div>
+        <div class="field"><label>Email</label><input type="email" id="profileEmail" disabled></div>
+        <div class="field"><label>Phone</label><input type="tel" id="profilePhone" placeholder="+234 ..."></div>
+        <button class="btn-primary">Save changes</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="main.js"></script>
+<script type="module">
+  import { requireGuest, logOut } from "./auth.js";
+  import { db } from "./Firebase-config.js";
+  import { doc, getDoc, collection, query, where, getDocs, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  document.getElementById('logoutLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    logOut();
+  });
+
+  requireGuest(async (user) => {
+    // Populate welcome message + profile from the users collection
+    const userSnap = await getDoc(doc(db, "users", user.uid));
+    const userData = userSnap.exists() ? userSnap.data() : {};
+    document.getElementById('welcomeText').textContent =
+      userData.name ? `Welcome back, ${userData.name.split(' ')[0]}.` : 'Welcome back.';
+    document.getElementById('profileName').value = userData.name || '';
+    document.getElementById('profileEmail').value = user.email || '';
+    document.getElementById('profilePhone').value = userData.phone || '';
+
+    // Load this guest's bookings only (filtered by their own uid)
+    const bookingsBody = document.getElementById('bookingsBody');
+    try {
+      const q = query(collection(db, "bookings"), where("guestId", "==", user.uid));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        bookingsBody.innerHTML = `<tr><td colspan="6" class="dash-empty">No bookings yet — 
+          <a href="booking.html" class="dash-action">book your first room</a>.</td></tr>`;
+        return;
+      }
+      bookingsBody.innerHTML = '';
+      snap.forEach(docSnap => {
+        const b = docSnap.data();
+        const badgeClass = b.status === 'Confirmed' ? 'confirmed'
+                          : b.status === 'Checked-out' ? 'checkedout'
+                          : b.status === 'Cancelled' ? 'cancelled' : 'pending';
+        bookingsBody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${b.roomName || ''}</td>
+            <td>${b.checkIn || ''}</td>
+            <td>${b.checkOut || ''}</td>
+            <td>₦${(b.totalAmount || 0).toLocaleString('en-NG')}</td>
+            <td><span class="badge ${badgeClass}">${b.status || 'Pending'}</span></td>
+            <td><a href="#" class="dash-action">View</a></td>
+          </tr>`);
+      });
+    } catch (err) {
+      bookingsBody.innerHTML = `<tr><td colspan="6" class="dash-empty">Couldn't load bookings right now.</td></tr>`;
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>

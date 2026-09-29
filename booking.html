@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Room — Aurelie Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="sitenav" style="position:relative; background:transparent;">
+  <div class="logo">Aurelie</div>
+  <div class="nav-links">
+    <a href="about.html">About</a>
+    <a href="room.html">Rooms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="booking.html" class="nav-book">Book a room</a>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay"></div>
+
+<section class="page-hero">
+  <h1 class="serif">Book Your Stay</h1>
+</section>
+
+<section class="section">
+  <div class="booking-steps"><b>1. Choose room</b>&nbsp;→&nbsp;2. Guest details&nbsp;→&nbsp;3. Payment</div>
+
+  <form class="booking-page" id="bookingForm">
+    <div>
+      <h2 style="color:var(--ink); font-size:1.5rem; margin-bottom:20px;">Available rooms</h2>
+
+      <div class="room-select-card">
+        <img src="Image/booking 2.jpeg" alt="Standard Room">
+        <div class="rinfo"><div class="rn">Standard Room</div><div class="rp">₦25,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Standard Room" data-price="25000">Select</button>
+      </div>
+      <div class="room-select-card">
+        <img src="Image/booking 1.jpeg" alt="Deluxe Room">
+        <div class="rinfo"><div class="rn">Deluxe Room</div><div class="rp">₦40,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Deluxe Room" data-price="40000">Select</button>
+      </div>
+      <div class="room-select-card">
+        <img src="Image/booking 3.jpeg" alt="Executive Suite">
+        <div class="rinfo"><div class="rn">Executive Suite</div><div class="rp">₦65,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Executive Suite" data-price="65000">Select</button>
+      </div>
+      <div class="room-select-card">
+        <img src="Image/booking 4.jpeg" alt="Swiss Room">
+        <div class="rinfo"><div class="rn">Swiss Room</div><div class="rp">₦50,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Swiss Room" data-price="50000">Select</button>
+      </div>
+      <div class="room-select-card">
+        <img src="Image/booking 5.jpeg" alt="Ambassadorial Suite">
+        <div class="rinfo"><div class="rn">Ambassadorial Suite</div><div class="rp">₦85,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Ambassadorial Suite" data-price="85000">Select</button>
+      </div>
+      <div class="room-select-card">
+        <img src="Image/booking 6.jpeg" alt="Presidential Suite">
+        <div class="rinfo"><div class="rn">Presidential Suite</div><div class="rp">₦150,000 / night</div></div>
+        <button type="button" class="select-btn" data-name="Presidential Suite" data-price="150000">Select</button>
+      </div>
+
+      <h2 style="color:var(--ink); font-size:1.3rem; margin:32px 0 20px;">Your details</h2>
+      <div class="field-row">
+        <div class="field"><label>Check-in</label><input type="date" id="checkin"></div>
+        <div class="field"><label>Check-out</label><input type="date" id="checkout"></div>
+      </div>
+      <div class="field"><label>Full name</label><input type="text" id="guestName" required></div>
+      <div class="field-row">
+        <div class="field"><label>Email</label><input type="email" id="guestEmail" required></div>
+        <div class="field"><label>Phone</label><input type="tel" id="guestPhone" required></div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h3>Booking summary</h3>
+      <div class="summary-row"><span id="sumRoom">No room selected</span><span id="sumPrice">—</span></div>
+      <div class="summary-row"><span id="sumNights">1 night</span><span id="sumMultiplier">×1</span></div>
+      <div class="summary-row"><span>Service fee</span><span>₦2,000</span></div>
+      <div class="summary-row total"><span>Total</span><span id="sumTotal">₦2,000</span></div>
+      <div id="bookingError" style="color:#a9483a; font-size:0.85rem; margin-top:4px; display:none;"></div>
+      <button type="submit" class="btn-primary btn-brass" id="bookingSubmitBtn">Pay &amp; confirm booking</button>
+      <p style="font-size:0.78rem; color:var(--sage); margin-top:10px;">
+        You'll be asked to log in first if you haven't already. Online payment isn't connected yet — for now this saves your booking as <b>Pending</b>.
+      </p>
+    </div>
+  </form>
+</section>
+
+<footer>
+  <span>© Aurelie Hotel</span>
+  <span>Ilesa Road, Osun State · +234 000 000 0000</span>
+</footer>
+
+<script src="main.js"></script>
+<script type="module">
+  import { auth } from "./firebase-config.js";
+  import { onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { db } from "./js/firebase-config.js";
+  import { collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  let currentUser = null;
+  onAuthStateChanged(auth, (user) => { currentUser = user; });
+
+  const errorBox = document.getElementById('bookingError');
+  const submitBtn = document.getElementById('bookingSubmitBtn');
+
+  document.addEventListener('booking:ready', async (e) => {
+    errorBox.style.display = 'none';
+
+    // Require login before a booking can be saved
+    if (!currentUser) {
+      sessionStorage.setItem('pendingBooking', JSON.stringify(e.detail));
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const name = document.getElementById('guestName').value;
+    const email = document.getElementById('guestEmail').value;
+    const phone = document.getElementById('guestPhone').value;
+    const checkin = document.getElementById('checkin').value;
+    const checkout = document.getElementById('checkout').value;
+
+    if (!name || !email || !phone || !checkin || !checkout) {
+      errorBox.textContent = 'Please fill in every field before continuing.';
+      errorBox.style.display = 'block';
+      return;
+    }
+
+    submitBtn.textContent = 'Saving your booking...';
+    try {
+      await addDoc(collection(db, "bookings"), {
+        guestId: currentUser.uid,
+        guestName: name,
+        guestEmail: email,
+        guestPhone: phone,
+        roomName: e.detail.roomName,
+        checkIn: checkin,
+        checkOut: checkout,
+        totalAmount: e.detail.total,
+        status: "Pending",
+        createdAt: serverTimestamp()
+      });
+      window.location.href = 'dashboard-guest.html';
+    } catch (err) {
+      submitBtn.textContent = 'Pay & confirm booking';
+      errorBox.textContent = "Couldn't save your booking — please try again.";
+      errorBox.style.display = 'block';
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>

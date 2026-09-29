@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up — Aurelie Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body style="background:var(--ivory);">
+
+<nav class="sitenav" style="position:relative; background:transparent; color:var(--ink);">
+  <div class="logo">Aurelie</div>
+  <div class="nav-links">
+    <a href="about.html">About</a>
+    <a href="room.html">Rooms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="booking.html" class="nav-book">Book a room</a>
+  <button class="hamburger dark" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay"></div>
+
+<div class="auth-wrap">
+  <form class="auth-card reveal in-view" id="signupForm">
+    <h2 class="serif">Create your account</h2>
+    <div class="sub">Book faster next time, track your stays.</div>
+    <div class="field"><label>Full name</label><input type="text" id="signupName" required></div>
+    <div class="field"><label>Email</label><input type="email" id="signupEmail" required></div>
+    <div class="field"><label>Password</label><input type="password" id="signupPassword" required minlength="6"></div>
+    <div id="signupError" style="color:#a9483a; font-size:0.85rem; margin:-8px 0 14px; display:none;"></div>
+    <button type="submit" class="btn-primary" id="signupBtn">Create account</button>
+    <div class="auth-switch">Already have an account? <a href="login.html">Log in</a></div>
+  </form>
+</div>
+
+<script src="main.js"></script>
+<script type="module">
+  import { signUpGuest } from "./auth.js";
+
+  const form = document.getElementById('signupForm');
+  const errorBox = document.getElementById('signupError');
+  const btn = document.getElementById('signupBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.style.display = 'none';
+    btn.textContent = 'Creating account...';
+
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+
+    try {
+      await signUpGuest(name, email, password);
+      window.location.href = 'dashboard-guest.html';
+    } catch (err) {
+      btn.textContent = 'Create account';
+      errorBox.textContent = friendlyError(err.code);
+      errorBox.style.display = 'block';
+    }
+  });
+
+  function friendlyError(code) {
+    if (code === 'auth/email-already-in-use') return 'An account already exists with that email — try logging in instead.';
+    if (code === 'auth/invalid-email') return 'That email address looks invalid.';
+    if (code === 'auth/weak-password') return 'Password should be at least 6 characters.';
+    return 'Something went wrong. Please try again.';
+  }
+</script>
+</body>
+</html>
