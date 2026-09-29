@@ -98,13 +98,15 @@
 
 <script src="main.js"></script>
 <script type="module">
-  import { auth } from "./firebase-config.js";
-  import { onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-  import { db } from "./js/firebase-config.js";
-  import { collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged } 
+  from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import { collection, addDoc, serverTimestamp } 
+  from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import { requireGuest } 
+  from "./auth.js";
 
+requireGuest(() => {});
   let currentUser = null;
   onAuthStateChanged(auth, (user) => { currentUser = user; });
 

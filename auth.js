@@ -51,11 +51,18 @@ export async function getUserRole(uid) {
 export function requireGuest(onReady) {
   onAuthStateChanged(auth, (user) => {
     if (!user) {
+      sessionStorage.setItem("redirectAfterLogin", window.location.pathname.split("/").pop());
       window.location.href = "login.html";
     } else {
       onReady(user);
     }
   });
+}
+
+export function goAfterLogin() {
+  const next = sessionStorage.getItem("redirectAfterLogin") || "dashboard-guest.html";
+  sessionStorage.removeItem("redirectAfterLogin");
+  window.location.href = next;
 }
 
 // Call this at the top of dashboard-admin.html.
